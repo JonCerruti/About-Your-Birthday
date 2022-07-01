@@ -29,23 +29,23 @@ function printResults(resultObj) {
 
   var bodyContentEl = document.createElement('p');
   bodyContentEl.innerHTML =
-    '<strong>Date:</strong> ' + resultObj.date + '<br/>';
+    '<strong>Year:</strong> ' + resultObj.year + '<br/>';
 
-  if (resultObj.subject) {
+  if (resultObj.text) {
     bodyContentEl.innerHTML +=
-      '<strong>Subjects:</strong> ' + resultObj.subject.join(', ') + '<br/>';
+      '<strong>Subjects:</strong> ' + resultObj.text + '<br/>';
   } else {
     bodyContentEl.innerHTML +=
       '<strong>Subjects:</strong> No subject for this entry.';
   }
 
-  if (resultObj.description) {
-    bodyContentEl.innerHTML +=
-      '<strong>Description:</strong> ' + resultObj.description[0];
-  } else {
-    bodyContentEl.innerHTML +=
-      '<strong>Description:</strong>  No description for this entry.';
-  }
+  // if (resultObj.description) {
+  //   bodyContentEl.innerHTML +=
+  //     '<strong>Description:</strong> ' + resultObj.description[0];
+  // } else {
+  //   bodyContentEl.innerHTML +=
+  //     '<strong>Description:</strong>  No description for this entry.';
+  // }
 
   var linkButtonEl = document.createElement('a');
   linkButtonEl.textContent = 'Read More';
@@ -57,14 +57,14 @@ function printResults(resultObj) {
   resultContentEl.append(resultCard);
 }
 
-function searchApi(query, format) {
-  var locQueryUrl = 'https://www.loc.gov/search/?fo=json';
+function searchApi() {
+  var locQueryUrl = 'https://api.wikimedia.org/feed/v1/wikipedia/en/onthisday/births/06/30';
+ 
+  // if (format) {
+  //   locQueryUrl = 'https://www.loc.gov/' + format + '/?fo=json';
+  // }
 
-  if (format) {
-    locQueryUrl = 'https://www.loc.gov/' + format + '/?fo=json';
-  }
-
-  locQueryUrl = locQueryUrl + '&q=' + query;
+  // locQueryUrl = locQueryUrl + '&q=' + query;
 
   fetch(locQueryUrl)
     .then(function (response) {
@@ -76,17 +76,17 @@ function searchApi(query, format) {
     })
     .then(function (locRes) {
       // write query to page so user knows what they are viewing
-      resultTextEl.textContent = locRes.search.query;
+      // resultTextEl.textContent = locRes.search.query;
 
       console.log(locRes);
 
-      if (!locRes.results.length) {
+      if (!locRes.births.length) {
         console.log('No results found!');
         resultContentEl.innerHTML = '<h3>No results found, search again!</h3>';
       } else {
         resultContentEl.textContent = '';
-        for (var i = 0; i < locRes.results.length; i++) {
-          printResults(locRes.results[i]);
+        for (var i = 0; i < locRes.births.length; i++) {
+          printResults(locRes.births[i]);
         }
       }
     })
@@ -111,4 +111,5 @@ function handleSearchFormSubmit(event) {
 
 searchFormEl.addEventListener('submit', handleSearchFormSubmit);
 
-getParams();
+// getParams();
+searchApi();
