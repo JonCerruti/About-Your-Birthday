@@ -111,5 +111,13 @@ function handleSearchFormSubmit(event) {
 
 searchFormEl.addEventListener('submit', handleSearchFormSubmit);
 
+// adding datepicker to improve date inputs
+$( function() {
+  $( "#search-input" ).datepicker({
+    changeMonth: true,
+    changeYear: true
+  });
+} );
+
 // getParams();
 searchApi();
