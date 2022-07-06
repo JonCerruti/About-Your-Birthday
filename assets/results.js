@@ -141,6 +141,14 @@ function getZodiac(date) {
     return 'Pices';
   }
 }
+// adding datepicker to improve date inputs
+$( function() {
+  $( "#search-input" ).datepicker({
+    changeMonth: true,
+    changeYear: true
+  });
+} );
+
 
 // getParams();
 searchApi();
