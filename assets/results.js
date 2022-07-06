@@ -127,7 +127,9 @@ searchFormEl.addEventListener('submit', handleSearchFormSubmit);
 $( function() {
   $( "#search-input" ).datepicker({
     changeMonth: true,
-    changeYear: true
+    changeYear: true,
+    yearRange:"-110:+0",
+    maxDate:"+0D"
   });
 } );
 
