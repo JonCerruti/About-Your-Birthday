@@ -4,16 +4,16 @@ var searchFormEl = document.querySelector('#search-form');
 
 
 
-function getParams() {
-  // Get the search params out of the URL (i.e. `?q=london&format=photo`) and convert it to an array (i.e. ['?q=london', 'format=photo'])
-  var searchParamsArr = document.location.search.split('&');
+// function getParams() {
+//   // Get the search params out of the URL (i.e. `?q=london&format=photo`) and convert it to an array (i.e. ['?q=london', 'format=photo'])
+//   var searchParamsArr = document.location.search.split('&');
 
-  // Get the query and format values
-  var query = searchParamsArr[0].split('=').pop();
-  var format = searchParamsArr[1].split('=').pop();
+//   // Get the query and format values
+//   var query = searchParamsArr[0].split('=').pop();
+//   var format = searchParamsArr[1].split('=').pop();
 
-  searchApi(query, format);
-}
+//   searchApi(query, format);
+// }
 
 function printResults(resultObj) {
   console.log(resultObj);
@@ -92,13 +92,13 @@ function searchApi() {
 
     
 
-      if (!locRes.births.length) {
+      if (!locRes.length) {
         console.log('No results found!');
         resultContentEl.innerHTML = '<h3>No results found, search again!</h3>';
       } else {
         resultContentEl.textContent = '';
-        for (var i = 0; i < locRes.births.length; i++) {
-          printResults(locRes.births[i]);
+        for (var i = 0; i < locRes.length; i++) {
+          printResults(locRes[i]);
         }
       }
     })
