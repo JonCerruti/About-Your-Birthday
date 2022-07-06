@@ -2,6 +2,8 @@ var resultTextEl = document.querySelector('#result-text');
 var resultContentEl = document.querySelector('#result-content');
 var searchFormEl = document.querySelector('#search-form');
 
+
+
 function getParams() {
   // Get the search params out of the URL (i.e. `?q=london&format=photo`) and convert it to an array (i.e. ['?q=london', 'format=photo'])
   var searchParamsArr = document.location.search.split('&');
@@ -49,7 +51,7 @@ function printResults(resultObj) {
 
   var linkButtonEl = document.createElement('a');
   linkButtonEl.textContent = 'Read More';
-  linkButtonEl.setAttribute('href', resultObj.url);
+  linkButtonEl.setAttribute('href', resultObj.pages[0].content_urls.desktop.page);
   linkButtonEl.classList.add('btn', 'btn-dark');
 
   resultBody.append(titleEl, bodyContentEl, linkButtonEl);
@@ -58,8 +60,16 @@ function printResults(resultObj) {
 }
 
 function searchApi() {
-  var locQueryUrl = 'https://api.wikimedia.org/feed/v1/wikipedia/en/onthisday/births/06/30';
- 
+  var locQueryUrl = 'https://api.wikimedia.org/feed/v1/wikipedia/en/onthisday/';
+  var queryType = "births";
+  var queryDate = "06/30";
+  
+  
+ locQueryUrl += queryType + "/" + queryDate;
+
+ fetch(locQueryUrl)
+ .then(response => response.json())
+ .then (data => console.log(data[queryDate]))
   // if (format) {
   //   locQueryUrl = 'https://www.loc.gov/' + format + '/?fo=json';
   // }
@@ -79,6 +89,8 @@ function searchApi() {
       // resultTextEl.textContent = locRes.search.query;
 
       console.log(locRes);
+
+    
 
       if (!locRes.births.length) {
         console.log('No results found!');
@@ -121,3 +133,7 @@ $( function() {
 
 // getParams();
 searchApi();
+
+
+
+
