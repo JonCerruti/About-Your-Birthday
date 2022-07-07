@@ -20,7 +20,7 @@ function printResults(resultObj) {
 
   // set up `<div>` to hold result content
   var resultCard = document.createElement('div');
-  resultCard.classList.add('card', 'bg-light', 'text-dark', 'mb-3', 'p-3');
+  resultCard.classList.add('rounded','border-gray-400','border-2','m-2','p-2');
 
   var resultBody = document.createElement('div');
   resultBody.classList.add('card-body');
@@ -40,14 +40,6 @@ function printResults(resultObj) {
     bodyContentEl.innerHTML +=
       '<strong>Subjects:</strong> No subject for this entry.';
   }
-
-  // if (resultObj.description) {
-  //   bodyContentEl.innerHTML +=
-  //     '<strong>Description:</strong> ' + resultObj.description[0];
-  // } else {
-  //   bodyContentEl.innerHTML +=
-  //     '<strong>Description:</strong>  No description for this entry.';
-  // }
 
   var linkButtonEl = document.createElement('a');
   linkButtonEl.textContent = 'Read More';
