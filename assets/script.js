@@ -2,10 +2,10 @@ var searchFormEl = document.querySelector('#search-form');
 
 
 var birthday;
-
+//local storage
 if(!localStorage.getItem('dates')) {
 console.log('dates not present setting value')
- localStorage.setItem('dates', JSON.stringify([{year: '2022', subject: 'sunrise',  readMore:'' }]));
+ localStorage.setItem('dates', JSON.stringify([{date: 'searchInputVal', searchParams: 'formalInputVal',  readMore:'' }]));
  birthday = localStorage.getItem("dates")
 }else{
   console.log("retrieving variables");
