@@ -5,7 +5,7 @@ var birthday;
 //local storage
 if(!localStorage.getItem('dates')) {
 console.log('dates not present setting value')
- localStorage.setItem('dates', JSON.stringify([{date: 'searchInputVal', searchParams: 'formalInputVal',  readMore:'' }]));
+ localStorage.setItem('dates', JSON.stringify([{date: searchInputVal, searchParams: formalInputVal,  readMore:'' }]));
  birthday = localStorage.getItem("dates")
 }else{
   console.log("retrieving variables");
