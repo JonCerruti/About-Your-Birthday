@@ -15,46 +15,55 @@ var searchFormEl = document.querySelector('#search-form');
 //   searchApi(query, format);
 // }
 
-function printResults(resultObj) {
+function printResults(resultObj, queryType) {
   console.log(resultObj);
+  console.log(queryType);
 
   // set up `<div>` to hold result content
   var resultCard = document.createElement('div');
-  resultCard.classList.add('card', 'bg-light', 'text-dark', 'mb-3', 'p-3');
+  resultCard.classList.add('rounded-lg','border-gray-400','border-2','m-2','p-2');
 
   var resultBody = document.createElement('div');
-  resultBody.classList.add('card-body');
   resultCard.append(resultBody);
 
-  var titleEl = document.createElement('h3');
-  titleEl.textContent = resultObj.title;
-
   var bodyContentEl = document.createElement('p');
-  bodyContentEl.innerHTML =
+  if(queryType=='births' || queryType == 'deaths' || queryType == 'selected'){
+    bodyContentEl.innerHTML =
     '<strong>Year:</strong> ' + resultObj.year + '<br/>';
-
-  if (resultObj.text) {
-    bodyContentEl.innerHTML +=
-      '<strong>Subjects:</strong> ' + resultObj.text + '<br/>';
-  } else {
-    bodyContentEl.innerHTML +=
-      '<strong>Subjects:</strong> No subject for this entry.';
+    if (resultObj.text) {
+      bodyContentEl.innerHTML +=
+        '<strong>Subject:</strong> ' + resultObj.text + '<br/>';
+    } else {
+      bodyContentEl.innerHTML +=
+        '<strong>Subject:</strong> No subject for this entry.';
+    }
+    var linkButtonEl = document.createElement('a');
+    linkButtonEl.textContent = 'Read More';
+    linkButtonEl.setAttribute('href', resultObj.pages[0].content_urls.desktop.page);
+    linkButtonEl.classList.add('bg-blue-500', 'hover:bg-blue-700', 'text-white','font-bold', 'rounded','m-3','p-2');
+    resultBody.append(bodyContentEl, linkButtonEl);
+  } else if(queryType == 'results'){
+    bodyContentEl.innerHTML =
+    '<strong>Sunrise:</strong> ' + resultObj.sunrise + '<br/>';
+    if (resultObj.sunset) {
+      bodyContentEl.innerHTML +=
+        '<strong>Sunset:</strong> ' + resultObj.sunset + '<br/>';
+    } else {
+      bodyContentEl.innerHTML +=
+        '<strong>No subject for this entry</strong>';
+    }
+    resultBody.append(bodyContentEl);
+  } else if (queryType=='holidays'){
+    bodyContentEl.innerHTML =
+    '<strong>Holiday:</strong> ' + resultObj.text + '<br/>';
+    var linkButtonEl = document.createElement('a');
+    linkButtonEl.textContent = 'Read More';
+    linkButtonEl.setAttribute('href', resultObj.pages[0].content_urls.desktop.page);
+    linkButtonEl.classList.add('bg-blue-500', 'hover:bg-blue-700', 'text-white','font-bold', 'rounded','m-3','p-2');
+    resultBody.append(bodyContentEl, linkButtonEl);
   }
 
-  // if (resultObj.description) {
-  //   bodyContentEl.innerHTML +=
-  //     '<strong>Description:</strong> ' + resultObj.description[0];
-  // } else {
-  //   bodyContentEl.innerHTML +=
-  //     '<strong>Description:</strong>  No description for this entry.';
-  // }
-
-  var linkButtonEl = document.createElement('a');
-  linkButtonEl.textContent = 'Read More';
-  linkButtonEl.setAttribute('href', resultObj.pages[0].content_urls.desktop.page);
-  linkButtonEl.classList.add('bg-blue-500', 'hover:bg-blue-700', 'text-white','font-bold', 'rounded','m-3','p-2');
-
-  resultBody.append(titleEl, bodyContentEl, linkButtonEl);
+  bodyContentEl.classList.add('m-2');
 
   resultContentEl.append(resultCard);
 }
@@ -62,11 +71,11 @@ function printResults(resultObj) {
 function searchApi(queryDate, queryType) {
   var queryString = 'https://api.wikimedia.org/feed/v1/wikipedia/en/onthisday/';
   var queryHelper = {}
-
+  console.log(queryType);
   var wikiDate = moment(queryDate,"MM/DD/YYYY").format("MM/DD");
   var sunDate = moment(queryDate,"MM/DD/YYYY").format("YYYY-MM-DD");
   
-  if(queryType=="sunrise/sunset"){
+  if(queryType=="sunrise"){
       queryString = "https://api.sunrise-sunset.org/json?lat=36.7201600&lng=-4.4203400&date=";
       queryString += sunDate;
       queryType="results";
@@ -80,7 +89,7 @@ function searchApi(queryDate, queryType) {
   }else{
       queryString += queryType+"/"+wikiDate;
   }
-
+  console.log(queryString);
   fetch(queryString)
     .then(function (response) {
       if (!response.ok) {
@@ -91,19 +100,22 @@ function searchApi(queryDate, queryType) {
     .then(function (data) {
       // write query to page so user knows what they are viewing
       // resultTextEl.textContent = locRes.search.query;
+      console.log(data);
       if (!data) {
         console.log('No results found!');
         resultContentEl.innerHTML = '<h3>No results found, search again!</h3>';
       } else if(queryType=="horoscope"){
           resultContentEl.textContent = '';
-          printResults(data);
-      } else if(queryType=="sunrise/sunset"){
+          printResults(data,queryType);
+      } else if(queryType=="results"){
+          console.log('You are querying for a sunrise/sunset')
           resultContentEl.textContent = '';
-          printResults(data[queryType]);
+          printResults(data[queryType],queryType);
       } else{
+          console.log('entered else')
           resultContentEl.textContent = '';
           for(i=0;i<data[queryType].length;i++){
-            printResults(data[queryType][i]);
+            printResults(data[queryType][i],queryType);
           }
 
       }
@@ -170,8 +182,8 @@ $( function() {
 } );
 
 
-// getParams();
-searchApi("07/05/2021","sunrise/sunset");
+//getParams();
+//searchApi("07/05/2021","sunrise/sunset");
 
 
 
