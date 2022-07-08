@@ -15,7 +15,7 @@ var searchFormEl = document.querySelector('#search-form');
 //   searchApi(query, format);
 // }
 
-function printResults(resultObj, queryType) {
+function printResults(resultObj, queryType, zodiac=null) {
   console.log(resultObj);
   console.log(queryType);
 
@@ -61,6 +61,23 @@ function printResults(resultObj, queryType) {
     linkButtonEl.setAttribute('href', resultObj.pages[0].content_urls.desktop.page);
     linkButtonEl.classList.add('bg-blue-500', 'hover:bg-blue-700', 'text-white','font-bold', 'rounded','m-3','p-2');
     resultBody.append(bodyContentEl, linkButtonEl);
+  } else if (queryType== 'horoscope'){
+    bodyContentEl.innerHTML +=
+    '<strong>Horoscope:</strong> ' + resultObj.description + '<br/>'
+   if(queryType == 'horoscope'){
+      bodyContentEl.innerHTML +=
+      '<strong>Most Compatible With:</strong> ' + resultObj.compatibility + '<br/>';
+  }if(queryType == 'horoscope'){
+      bodyContentEl.innerHTML +=
+      '<strong>Color:</strong> ' + resultObj.color + '<br/>';
+    }if(queryType == 'horoscope'){
+      bodyContentEl.innerHTML +=
+      '<strong>Lucky Number:</strong> ' + resultObj.lucky_number + '<br/>';
+    } else {
+      bodyContentEl.innerHTML +=
+        '<strong>No subject for this entry</strong>';
+    }
+    resultBody.append(bodyContentEl);
   }
 
   bodyContentEl.classList.add('m-2');
@@ -90,7 +107,7 @@ function searchApi(queryDate, queryType) {
       queryString += queryType+"/"+wikiDate;
   }
   console.log(queryString);
-  fetch(queryString)
+  fetch(queryString, queryHelper)
     .then(function (response) {
       if (!response.ok) {
         throw response.json();
