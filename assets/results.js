@@ -4,16 +4,16 @@ var searchFormEl = document.querySelector('#search-form');
 
 
 
-function getParams() {
-  // Get the search params out of the URL (i.e. `?q=london&format=photo`) and convert it to an array (i.e. ['?q=london', 'format=photo'])
-  var searchParamsArr = document.location.search.split('&');
+// function getParams() {
+//   // Get the search params out of the URL (i.e. `?q=london&format=photo`) and convert it to an array (i.e. ['?q=london', 'format=photo'])
+//   var searchParamsArr = document.location.search.split('&');
 
-  // Get the query and format values
-  var query = searchParamsArr[0].split('=').pop();
-  var format = searchParamsArr[1].split('=').pop();
+//   // Get the query and format values
+//   var query = searchParamsArr[0].split('=').pop();
+//   var format = searchParamsArr[1].split('=').pop();
 
-  searchApi(query, format);
-}
+//   searchApi(query, format);
+// }
 
 function printResults(resultObj, queryType) {
   console.log(resultObj);
@@ -61,6 +61,22 @@ function printResults(resultObj, queryType) {
     linkButtonEl.setAttribute('href', resultObj.pages[0].content_urls.desktop.page);
     linkButtonEl.classList.add('bg-blue-500', 'hover:bg-blue-700', 'text-white','font-bold', 'rounded','m-3','p-2');
     resultBody.append(bodyContentEl, linkButtonEl);
+  } else if (queryType== 'horoscope'){
+    bodyContentEl.innerHTML +=
+    '<strong>Horoscope:</strong> ' + resultObj.description + '<br/>';
+    bodyContentEl.innerHTML +=
+    '<strong>Most Compatible With:</strong> ' + resultObj.compatibility + '<br/>';
+    bodyContentEl.innerHTML +=
+    '<strong>Color:</strong> ' + resultObj.color + '<br/>';
+    bodyContentEl.innerHTML +=
+    '<strong>Lucky Number:</strong> ' + resultObj.lucky_number + '<br/>';
+    
+    resultBody.append(bodyContentEl);
+    } else {
+      bodyContentEl.innerHTML +=
+        '<strong>No subject for this entry</strong>';
+    
+    
   }
 
   bodyContentEl.classList.add('m-2');
@@ -90,7 +106,7 @@ function searchApi(queryDate, queryType) {
       queryString += queryType+"/"+wikiDate;
   }
   console.log(queryString);
-  fetch(queryString)
+  fetch(queryString, queryHelper)
     .then(function (response) {
       if (!response.ok) {
         throw response.json();
@@ -117,6 +133,7 @@ function searchApi(queryDate, queryType) {
           for(i=0;i<data[queryType].length;i++){
             printResults(data[queryType][i],queryType);
           }
+
       }
     })
     .catch(function (error) {
