@@ -15,7 +15,7 @@ var searchFormEl = document.querySelector('#search-form');
 //   searchApi(query, format);
 // }
 
-function printResults(resultObj, queryType, zodiac=null) {
+function printResults(resultObj, queryType) {
   console.log(resultObj);
   console.log(queryType);
 
@@ -63,21 +63,20 @@ function printResults(resultObj, queryType, zodiac=null) {
     resultBody.append(bodyContentEl, linkButtonEl);
   } else if (queryType== 'horoscope'){
     bodyContentEl.innerHTML +=
-    '<strong>Horoscope:</strong> ' + resultObj.description + '<br/>'
-   if(queryType == 'horoscope'){
-      bodyContentEl.innerHTML +=
-      '<strong>Most Compatible With:</strong> ' + resultObj.compatibility + '<br/>';
-  }if(queryType == 'horoscope'){
-      bodyContentEl.innerHTML +=
-      '<strong>Color:</strong> ' + resultObj.color + '<br/>';
-    }if(queryType == 'horoscope'){
-      bodyContentEl.innerHTML +=
-      '<strong>Lucky Number:</strong> ' + resultObj.lucky_number + '<br/>';
+    '<strong>Horoscope:</strong> ' + resultObj.description + '<br/>';
+    bodyContentEl.innerHTML +=
+    '<strong>Most Compatible With:</strong> ' + resultObj.compatibility + '<br/>';
+    bodyContentEl.innerHTML +=
+    '<strong>Color:</strong> ' + resultObj.color + '<br/>';
+    bodyContentEl.innerHTML +=
+    '<strong>Lucky Number:</strong> ' + resultObj.lucky_number + '<br/>';
+    
+    resultBody.append(bodyContentEl);
     } else {
       bodyContentEl.innerHTML +=
         '<strong>No subject for this entry</strong>';
-    }
-    resultBody.append(bodyContentEl);
+    
+    
   }
 
   bodyContentEl.classList.add('m-2');
