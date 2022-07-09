@@ -1,19 +1,22 @@
 var resultTextEl = document.querySelector('#result-text');
 var resultContentEl = document.querySelector('#result-content');
 var searchFormEl = document.querySelector('#search-form');
+var priorSearchDiv = $('#previous-searches');
 
 
 
-// function getParams() {
-//   // Get the search params out of the URL (i.e. `?q=london&format=photo`) and convert it to an array (i.e. ['?q=london', 'format=photo'])
-//   var searchParamsArr = document.location.search.split('&');
+function getParams() {
+  // Get the search params out of the URL (i.e. `?q=london&format=photo`) and convert it to an array (i.e. ['?q=london', 'format=photo'])
+  var searchParamsArr = document.location.search.split('&');
 
-//   // Get the query and format values
-//   var query = searchParamsArr[0].split('=').pop();
-//   var format = searchParamsArr[1].split('=').pop();
+  // Get the query and format values
+  var query = searchParamsArr[0].split('=').pop();
+  var format = searchParamsArr[1].split('=').pop();
+  // show search
+  renderPriorSearch();
 
-//   searchApi(query, format);
-// }
+  searchApi(query, format);
+}
 
 function printResults(resultObj, queryType) {
   console.log(resultObj);
@@ -27,6 +30,7 @@ function printResults(resultObj, queryType) {
   resultCard.append(resultBody);
 
   var bodyContentEl = document.createElement('p');
+  // formatting specific to Births/Deaths/Events data
   if(queryType=='births' || queryType == 'deaths' || queryType == 'selected'){
     bodyContentEl.innerHTML =
     '<strong>Year:</strong> ' + resultObj.year + '<br/>';
@@ -37,11 +41,12 @@ function printResults(resultObj, queryType) {
       bodyContentEl.innerHTML +=
         '<strong>Subject:</strong> No subject for this entry.';
     }
-    var linkButtonEl = document.createElement('a');
+    var linkButtonEl = document.createElement('a'); // there is a button link to wikipedia to access more info
     linkButtonEl.textContent = 'Read More';
     linkButtonEl.setAttribute('href', resultObj.pages[0].content_urls.desktop.page);
     linkButtonEl.classList.add('bg-blue-500', 'hover:bg-blue-700', 'text-white','font-bold', 'rounded','m-3','p-2');
     resultBody.append(bodyContentEl, linkButtonEl);
+  // formatting specific for sunrise/sunset data
   } else if(queryType == 'results'){
     bodyContentEl.innerHTML =
     '<strong>Sunrise:</strong> ' + resultObj.sunrise + '<br/>';
@@ -53,14 +58,16 @@ function printResults(resultObj, queryType) {
         '<strong>No subject for this entry</strong>';
     }
     resultBody.append(bodyContentEl);
+  // formatting specific for holidays data
   } else if (queryType=='holidays'){
     bodyContentEl.innerHTML =
     '<strong>Holiday:</strong> ' + resultObj.text + '<br/>';
-    var linkButtonEl = document.createElement('a');
+    var linkButtonEl = document.createElement('a'); // there is a button link to wikipedia to access more info
     linkButtonEl.textContent = 'Read More';
     linkButtonEl.setAttribute('href', resultObj.pages[0].content_urls.desktop.page);
     linkButtonEl.classList.add('bg-blue-500', 'hover:bg-blue-700', 'text-white','font-bold', 'rounded','m-3','p-2');
     resultBody.append(bodyContentEl, linkButtonEl);
+  // formatting specific for the horoscope data
   } else if (queryType== 'horoscope'){
     bodyContentEl.innerHTML +=
     '<strong>Horoscope:</strong> ' + resultObj.description + '<br/>';
@@ -87,25 +94,36 @@ function printResults(resultObj, queryType) {
 function searchApi(queryDate, queryType) {
   var queryString = 'https://api.wikimedia.org/feed/v1/wikipedia/en/onthisday/';
   var queryHelper = {}
-  console.log(queryType);
+  // Dates needed for output formatting
   var wikiDate = moment(queryDate,"MM/DD/YYYY").format("MM/DD");
   var sunDate = moment(queryDate,"MM/DD/YYYY").format("YYYY-MM-DD");
+  var resultWikiDate = moment(queryDate,"MM/DD/YYYY").format("MMMM Do");
+  var resultSunDate = moment(queryDate,"MM/DD/YYYY").format("MMMM Do, YYYY");
   
+  // format the querystring to the specific API
   if(queryType=="sunrise"){
       queryString = "https://api.sunrise-sunset.org/json?lat=36.7201600&lng=-4.4203400&date=";
       queryString += sunDate;
+      // changes to match json api result
       queryType="results";
+      // update showing results for
+      resultTextEl.textContent = "Sunrise/Sunset on "+resultSunDate;
   } else if (queryType=="horoscope"){
       queryString = "https://aztro.sameerkumar.website/?sign=";
       queryString += getZodiac(queryDate)+"&day=today";
-      queryHelper = {method:"POST"};
+      queryHelper = {method:"POST"}; // needed to get horoscope
+      // update showing results for
+      resultTextEl.textContent = getZodiac(queryDate).charAt(0).toUpperCase() + getZodiac(queryDate).slice(1)+" Zodiac Sign";
   } else if (queryType=="events"){
       queryType = 'selected';
       queryString += queryType+"/"+wikiDate;
-  }else{
+      // update showing results for
+      resultTextEl.textContent = "Events on "+resultWikiDate;
+  } else{
       queryString += queryType+"/"+wikiDate;
+      // update showing results for
+      resultTextEl.textContent = queryType.charAt(0).toUpperCase() + queryType.slice(1)+" on "+resultWikiDate;
   }
-  console.log(queryString);
   fetch(queryString, queryHelper)
     .then(function (response) {
       if (!response.ok) {
@@ -115,25 +133,36 @@ function searchApi(queryDate, queryType) {
     })
     .then(function (data) {
       // write query to page so user knows what they are viewing
-      // resultTextEl.textContent = locRes.search.query;
       console.log(data);
-      if (!data) {
+      if (!data) { // if nothing is found
         console.log('No results found!');
         resultContentEl.innerHTML = '<h3>No results found, search again!</h3>';
-      } else if(queryType=="horoscope"){
+      } else if(queryType=="horoscope"){ // formatting the return results specific for the API
           resultContentEl.textContent = '';
           printResults(data,queryType);
       } else if(queryType=="results"){
-          console.log('You are querying for a sunrise/sunset')
           resultContentEl.textContent = '';
           printResults(data[queryType],queryType);
       } else{
-          console.log('entered else')
           resultContentEl.textContent = '';
-          for(i=0;i<data[queryType].length;i++){
-            printResults(data[queryType][i],queryType);
+          // Only want to display 15 results at most
+          var dataLength = data[queryType].length;
+          var selectionArray = [];
+          if(dataLength>15){
+          // randomizer so the results are unique for each search if there are more than 15
+            while(selectionArray.length<15){
+              var r = Math.floor(Math.random()*dataLength);
+              if(selectionArray.indexOf(r) === -1) selectionArray.push(r);
+            }
+            selectionArray.forEach(indexValue =>{
+              printResults(data[queryType][indexValue],queryType);
+            })
+          } else {
+            resultContentEl.textContent = '';
+            for(i=0;i<data[queryType].length;i++){
+              printResults(data[queryType][i],queryType);
+            }
           }
-
       }
     })
     .catch(function (error) {
@@ -147,12 +176,24 @@ function handleSearchFormSubmit(event) {
   var searchInputVal = document.querySelector('#search-input').value;
   var formatInputVal = document.querySelector('#format-input').value;
 
+  // review local Storage
+  var priorSearch = localStorage.getItem('dates');
+
   if (!searchInputVal) {
     console.error('You need a search input value!');
     return;
   }
-
+  // render prior search
+  if(localStorage.getItem('dates')){
+    renderPriorSearch();
+  }
+  // update local with new search
+  if(searchInputVal!=priorSearch.date || formatInputVal != priorSearch.searchParams){
+    localStorage.setItem('dates', JSON.stringify({date: searchInputVal, searchParams: formatInputVal,  readMore:'' }));
+  }
+// run search
   searchApi(searchInputVal, formatInputVal);
+
 }
 
 searchFormEl.addEventListener('submit', handleSearchFormSubmit);
@@ -197,9 +238,28 @@ $( function() {
   });
 } );
 
+function renderPriorSearch () {
+  // clear existing
+  $('.past-search').remove();
+  // create new elements
+  var priorQuery = localStorage.getItem('dates');
+  priorQuery = JSON.parse(priorQuery);
+
+  var priorQueryDate = priorQuery.date;
+  var priorQueryType = priorQuery.searchParams.charAt(0).toUpperCase() + priorQuery.searchParams.slice(1);
+  var newSearch = $('<div>').addClass('past-search rounded-full border-2 m-2 p-2 bg-zinc-700 text-white');
+  newSearch.text(priorQueryDate+' - '+priorQueryType)
+  // append element to prior search
+  priorSearchDiv.append(newSearch);
+  // add eventlistener
+  $('.past-search').on('click',function(){
+    renderPriorSearch();
+    searchApi(priorQueryDate,priorQueryType)
+  });
+}
 
 //getParams();
-//searchApi("07/05/2021","sunrise/sunset");
+
 
 
 
