@@ -4,53 +4,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Library of Congress Search</title>
-  <link href="https://fonts.googleapis.com/css2?family=Fira+Sans:wght@400&family=Merriweather:wght@700&display=swap"
-    rel="stylesheet" />
-  <link rel="stylesheet" href="//code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
-  <link rel="stylesheet" href="./assets/jass.css" />
-  <link rel="stylesheet" href="./assets/css/style.css" />
-</head>
-
-<body>
-  <div class="flex-row align-center justify-center min-100-vh bg-primary">
-    <div class="col-12 col-md-9 flex-column align-center bg-light p-5">
-      <h1 class="text-primary">Library of Congress Search Engine</h1>
-      <form id="search-form" class="form w-100">
-        <input id="search-input" class="form-input w-100" type="text" placeholder="Search!">
-        <select id="format-input" class="form-input w-100">
-          <option value="" disabled selected>Select a format...</option>
-          <option value="maps">Maps</option>
-          <option value="audio">Audio</option>
-          <option value="photos">Photos</option>
-          <option value="manuscripts">Manuscripts</option>
-          <option value="newspapers">Newspapers</option>
-          <option value="film-and-videos">Film and Videos</option>
-          <option value="notated-music">Notated Music</option>
-          <option value="websites">Websites</option>
-        </select>
-        <button class="btn btn-info btn-block">Click Me</button>
-      </form>
-    </div>
-  </div>
-  <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
-  <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
-  <script src="assets/script.js"></script>
-</body>
-
-</html>
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>About Your Birthday</title>
   <link href="https://fonts.googleapis.com/css2?family=Fira+Sans:wght@400&family=Merriweather:wght@700&display=swap"
     rel="stylesheet" />
   <link rel="stylesheet" href="//code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
-  <link rel="stylesheet" href="./assets/css/jass.css" />
-  <link rel="stylesheet" href="./assets/css/style.css" />
+  <link rel="stylesheet" href="./assets/style.css" />
 </head>
 <head>
   <style> 
@@ -61,9 +19,9 @@
   -o-background-size: cover;
   background-size: cover;
   }
-</style>
+  </style>
     </head>
-    <body>
+    <body class="bodyone">
        <nav class="navbar background">
             <ul class="nav-list">
             </ul>
@@ -74,18 +32,17 @@
         </nav>
     </body>
 </html> 
-  </style>
   </head>      
     <div class="mt-8">
-      <h1 class="text-2xl font-bold text-gray-900 sm:text-3xl">
+      <headone class="text-2xl font-bold text-gray-900 sm:text-3xl">
         About Your Birthday
-      </h1>
+      </headone>
 
       <p class="mt-1.5 text-sm text-gray-500">
         Find out the history of your birthday!
       </p>
     <form>
-        <span>
+        <span class="form span"> 
             <label for="day">Day:</label>
             <select name="day" id="day"></select>
         </span>
@@ -96,7 +53,7 @@
         <span>
             <label for="year">Year:</label>
             <select name="year" id="year">Year:</select>
-        </span>
+        </span class="form span" >
     </form>
 </body>
   
