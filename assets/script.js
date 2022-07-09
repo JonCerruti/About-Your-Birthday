@@ -1,6 +1,6 @@
 var searchFormEl = document.querySelector('#search-form');
 
-function handleSearchFormSubmit(event) {
+function handleSearchFormSubmit(event) { 
   event.preventDefault();
 
   var searchInputVal = document.querySelector('#search-input').value;
@@ -10,10 +10,9 @@ function handleSearchFormSubmit(event) {
     console.error('You need a search input value!');
     return;
   }
-
-  var queryString = './search-results.html?q=' + searchInputVal + '&format=' + formatInputVal;
-
+  
+  var queryString = './birthday-results.html?q=' + searchInputVal + '&format=' + formatInputVal;
+  localStorage.setItem('dates', JSON.stringify({date: searchInputVal, searchParams: formatInputVal,  readMore:'' }));
   location.assign(queryString);
 }
-
-searchFormEl.addEventListener('submit', handleSearchFormSubmit);
+ searchFormEl.addEventListener('submit', handleSearchFormSubmit);
