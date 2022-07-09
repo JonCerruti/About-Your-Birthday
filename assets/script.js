@@ -12,7 +12,7 @@ function handleSearchFormSubmit(event) {
   }
   
   var queryString = './birthday-results.html?q=' + searchInputVal + '&format=' + formatInputVal;
-  localStorage.setItem('dates', JSON.stringify({date: searchInputVal, searchParams: formalInputVal,  readMore:'' }));
+  localStorage.setItem('dates', JSON.stringify({date: searchInputVal, searchParams: formatInputVal,  readMore:'' }));
   location.assign(queryString);
 }
  searchFormEl.addEventListener('submit', handleSearchFormSubmit);
