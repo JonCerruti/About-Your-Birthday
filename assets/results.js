@@ -24,7 +24,7 @@ function printResults(resultObj, queryType) {
 
   // set up `<div>` to hold result content
   var resultCard = document.createElement('div');
-  resultCard.classList.add('rounded-lg','border-gray-400','border-2','m-2','p-2');
+  resultCard.classList.add('rounded-lg','border-gray-400','border-2','m-2','p-2', 'text-white','bg-teal-600');
 
   var resultBody = document.createElement('div');
   resultCard.append(resultBody);
@@ -33,10 +33,10 @@ function printResults(resultObj, queryType) {
   // formatting specific to Births/Deaths/Events data
   if(queryType=='births' || queryType == 'deaths' || queryType == 'selected'){
     bodyContentEl.innerHTML =
-    '<strong>Year:</strong> ' + resultObj.year + '<br/>';
+    '<strong><span class="text-xl">Year:</span></strong> ' + resultObj.year + '<br/>';
     if (resultObj.text) {
       bodyContentEl.innerHTML +=
-        '<strong>Subject:</strong> ' + resultObj.text + '<br/>';
+        '<strong><span class="text-xl">Subject:</span></strong> ' + resultObj.text + '<br/>';
     } else {
       bodyContentEl.innerHTML +=
         '<strong>Subject:</strong> No subject for this entry.';
@@ -44,15 +44,15 @@ function printResults(resultObj, queryType) {
     var linkButtonEl = document.createElement('a'); // there is a button link to wikipedia to access more info
     linkButtonEl.textContent = 'Read More';
     linkButtonEl.setAttribute('href', resultObj.pages[0].content_urls.desktop.page);
-    linkButtonEl.classList.add('bg-blue-500', 'hover:bg-blue-700', 'text-white','font-bold', 'rounded','m-3','p-2');
+    linkButtonEl.classList.add('bg-gray-500', 'hover:bg-gray-700', 'text-white','font-bold', 'rounded','m-1','p-2');
     resultBody.append(bodyContentEl, linkButtonEl);
   // formatting specific for sunrise/sunset data
   } else if(queryType == 'results'){
     bodyContentEl.innerHTML =
-    '<strong>Sunrise:</strong> ' + resultObj.sunrise + '<br/>';
+    '<strong><span class="text-xl">Sunrise:</span></strong> ' + resultObj.sunrise + '<br/>';
     if (resultObj.sunset) {
       bodyContentEl.innerHTML +=
-        '<strong>Sunset:</strong> ' + resultObj.sunset + '<br/>';
+        '<strong><span class="text-xl">Sunset:</span></strong> ' + resultObj.sunset + '<br/>';
     } else {
       bodyContentEl.innerHTML +=
         '<strong>No subject for this entry</strong>';
@@ -61,22 +61,22 @@ function printResults(resultObj, queryType) {
   // formatting specific for holidays data
   } else if (queryType=='holidays'){
     bodyContentEl.innerHTML =
-    '<strong>Holiday:</strong> ' + resultObj.text + '<br/>';
+    '<strong><span class="text-xl">Holiday:</span></strong> ' + resultObj.text + '<br/>';
     var linkButtonEl = document.createElement('a'); // there is a button link to wikipedia to access more info
     linkButtonEl.textContent = 'Read More';
     linkButtonEl.setAttribute('href', resultObj.pages[0].content_urls.desktop.page);
-    linkButtonEl.classList.add('bg-blue-500', 'hover:bg-blue-700', 'text-white','font-bold', 'rounded','m-3','p-2');
+    linkButtonEl.classList.add('bg-gray-500', 'hover:bg-gray-700', 'text-white','font-bold', 'rounded','m-3','p-2');
     resultBody.append(bodyContentEl, linkButtonEl);
   // formatting specific for the horoscope data
   } else if (queryType== 'horoscope'){
     bodyContentEl.innerHTML +=
-    '<strong>Horoscope:</strong> ' + resultObj.description + '<br/>';
+    '<strong><span class="text-xl">Horoscope:</span></strong> ' + resultObj.description + '<br/>';
     bodyContentEl.innerHTML +=
-    '<strong>Most Compatible With:</strong> ' + resultObj.compatibility + '<br/>';
+    '<strong><span class="text-xl">Most Compatible With:</span></strong> ' + resultObj.compatibility + '<br/>';
     bodyContentEl.innerHTML +=
-    '<strong>Color:</strong> ' + resultObj.color + '<br/>';
+    '<strong><span class="text-xl">Color:</span></strong> ' + resultObj.color + '<br/>';
     bodyContentEl.innerHTML +=
-    '<strong>Lucky Number:</strong> ' + resultObj.lucky_number + '<br/>';
+    '<strong><span class="text-xl">Lucky Number:</span></strong> ' + resultObj.lucky_number + '<br/>';
     
     resultBody.append(bodyContentEl);
     } else {
