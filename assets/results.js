@@ -1,6 +1,7 @@
 var resultTextEl = document.querySelector('#result-text');
 var resultContentEl = document.querySelector('#result-content');
 var searchFormEl = document.querySelector('#search-form');
+var priorSearchDiv = $('#previous-searches');
 
 
 
@@ -11,6 +12,8 @@ function getParams() {
   // Get the query and format values
   var query = searchParamsArr[0].split('=').pop();
   var format = searchParamsArr[1].split('=').pop();
+  // show search
+  renderPriorSearch();
 
   searchApi(query, format);
 }
@@ -173,12 +176,24 @@ function handleSearchFormSubmit(event) {
   var searchInputVal = document.querySelector('#search-input').value;
   var formatInputVal = document.querySelector('#format-input').value;
 
+  // review local Storage
+  var priorSearch = localStorage.getItem('dates');
+
   if (!searchInputVal) {
     console.error('You need a search input value!');
     return;
   }
-
+  // render prior search
+  if(localStorage.getItem('dates')){
+    renderPriorSearch();
+  }
+  // update local with new search
+  if(searchInputVal!=priorSearch.date || formatInputVal != priorSearch.searchParams){
+    localStorage.setItem('dates', JSON.stringify({date: searchInputVal, searchParams: formatInputVal,  readMore:'' }));
+  }
+// run search
   searchApi(searchInputVal, formatInputVal);
+
 }
 
 searchFormEl.addEventListener('submit', handleSearchFormSubmit);
@@ -223,6 +238,25 @@ $( function() {
   });
 } );
 
+function renderPriorSearch () {
+  // clear existing
+  $('.past-search').remove();
+  // create new elements
+  var priorQuery = localStorage.getItem('dates');
+  priorQuery = JSON.parse(priorQuery);
+
+  var priorQueryDate = priorQuery.date;
+  var priorQueryType = priorQuery.searchParams.charAt(0).toUpperCase() + priorQuery.searchParams.slice(1);
+  var newSearch = $('<div>').addClass('past-search rounded-full border-2 m-2 p-2 bg-zinc-700 text-white');
+  newSearch.text(priorQueryDate+' - '+priorQueryType)
+  // append element to prior search
+  priorSearchDiv.append(newSearch);
+  // add eventlistener
+  $('.past-search').on('click',function(){
+    renderPriorSearch();
+    searchApi(priorQueryDate,priorQueryType)
+  });
+}
 
 //getParams();
 
