@@ -185,12 +185,13 @@ function handleSearchFormSubmit(event) {
   }
   // render prior search
   if(localStorage.getItem('dates')){
+    if(searchInputVal!=priorSearch.date || formatInputVal != priorSearch.searchParams){
+      localStorage.setItem('dates', JSON.stringify({date: searchInputVal, searchParams: formatInputVal,  readMore:'' }));
+    }
     renderPriorSearch();
   }
   // update local with new search
-  if(searchInputVal!=priorSearch.date || formatInputVal != priorSearch.searchParams){
-    localStorage.setItem('dates', JSON.stringify({date: searchInputVal, searchParams: formatInputVal,  readMore:'' }));
-  }
+  
 // run search
   searchApi(searchInputVal, formatInputVal);
 
