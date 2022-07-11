@@ -13,7 +13,7 @@
     align-items:center;
     flex-direction: column;
 }
-form span{
+.formSpan{
     display: block;
     margin: 20px 0;
 }
@@ -21,3 +21,10 @@ button, input, select, textarea {
     font-family: inherit;
     font-size: 100%;
   }
+.htmlOne { 
+    background: url(https://www.1800flowers.com/blog/wp-content/uploads/2021/02/Zodiac-header.jpg.webp) no-repeat center center fixed; 
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+}
