@@ -259,7 +259,7 @@ function renderPriorSearch () {
   });
 }
 
-//getParams();
+getParams();
 
 
 
